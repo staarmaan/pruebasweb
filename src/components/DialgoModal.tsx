@@ -69,7 +69,7 @@ const Buttons = styled.div`
   }
 `;
 
-const isClickInsideRectangle = (e: MouseEvent, element: HTMLElement) => {
+export const isClickInsideRectangle = (e: MouseEvent, element: HTMLElement) => {
     const r = element.getBoundingClientRect();
 
     return (
