@@ -20,7 +20,7 @@ describe('Validación de Formulario', () => {
       const data = {
         name: 'Firulais',
         caretaker: 'Juan Garcia',
-        email: 'test@email.com',
+        email: 'testemail.com',
         date: '2024-01-01',
         symptoms: 'síntomas'
       }
@@ -33,7 +33,7 @@ describe('isClickInsideRectangle', () => {
   test('retorna true si el click está dentro', () => {
     const element = {
       getBoundingClientRect: () => ({
-        left: 200,
+        left: 0,
         right: 100,
         top: 0,
         bottom: 100
