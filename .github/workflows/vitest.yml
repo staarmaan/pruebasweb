@@ -1,9 +1,9 @@
 name: Vitest Unit Tests
 on:
   push:
-    branches: [ ramaArellano ]
+    branches: [ main ]
   pull_request:
-    branches: [ ramaArellano ]
+    branches: [ main ]
 
 jobs:
   test:
@@ -13,4 +13,4 @@ jobs:
       - name: Install Dependencies
         run: npm install --legacy-peer-deps
       - name: Run Tests
-        run: npm test 
+        run: npm test -- --coverage
