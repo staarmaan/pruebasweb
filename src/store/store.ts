@@ -8,7 +8,7 @@ type PacientesState = {
     eliminarPaciente: (id: Patient['id']) => void;
 }
 
-const crearPaciente = (data: DraftPatient): Patient => {
+export const crearPaciente = (data: DraftPatient): Patient => {
     return {
         id: uuidv4(),
         ...data
