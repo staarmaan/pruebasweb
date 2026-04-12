@@ -26,6 +26,9 @@ jobs:
         with:
             node-version: '18'
 
+      - name: Install Dependencies
+        run: npm install --legacy-peer-deps
+
       - name: Instalar Newman
         run: npm install -g newman
 
