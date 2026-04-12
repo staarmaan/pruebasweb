@@ -20,9 +20,12 @@ jobs:
         run: sleep 3
       - name: Run Postman Collection Tests
         run: newman run "Pruebas de humo zuztand.json" --reporters cli,html --reporter-html-outfile "reports/index.html"
+      - name: Debug - List Generated Files
+        if: always()
+        run: find . -name "index.html" -o -name "*.html" | head -20 && ls -la reports/ 2>/dev/null || echo "reports folder not found"
       - name: Upload HTML Report
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: postman-report
-          path: reports/index.html
+          path: reports/
