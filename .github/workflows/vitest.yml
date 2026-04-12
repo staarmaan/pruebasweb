@@ -36,4 +36,27 @@ jobs:
         run: node server/server.js & sleep 5
 
       - name: Ejecutar pruebas de humo
-        run: newman run tests/pruebas_humo_marco.json
+        run: newman run tests-api/pruebas_humo_marco.json
+  e2e-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Clonar repositorio
+        uses: actions/checkout@v4
+
+      - name: Instalar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Dependencies
+        run: npm install --legacy-peer-deps
+
+      - name: Instalar Playwright
+        run: npx playwright install --with-deps
+
+      - name: Levantar frontend (Vite)
+        run: npm run dev & sleep 10
+
+      - name: Ejecutar tests E2E
+        run: npm run testUI
