@@ -1,0 +1,22 @@
+name: Vitest API Test
+on:
+  push:
+    branches: [ ramaLomas ]
+  pull_request:
+    branches: [ ramaLomas ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Dependencies
+        run: npm install --legacy-peer-deps
+      - name: Install Newman
+        run: npm install -g newman
+      - name: Start Server
+        run: node server/server.js &
+      - name: Wait for Server to Start
+        run: sleep 3
+      - name: Run Postman Collection Tests
+        run: newman run "Pruebas de humo zuztand.json" --environment <(echo '{"id":"env","values":[]}')
