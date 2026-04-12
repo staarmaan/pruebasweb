@@ -11,6 +11,10 @@ export default defineConfig({
     react(),
   ],
     test: {
-        environment: 'jsdom'
+        environment: 'jsdom',
+        coverage: {
+              provider: 'v8',
+              reporter: ['text', 'html'],
+            }
       }
 })
