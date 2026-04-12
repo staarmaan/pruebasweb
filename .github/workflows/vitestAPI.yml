@@ -21,10 +21,13 @@ jobs:
       - name: Create Reports Directory
         run: mkdir -p reports
       - name: Run Postman Collection Tests
-        run: newman run "Pruebas de humo zuztand.json" --reporters cli,html --reporter-html-outfile reports/index.html
+        run: newman run "Pruebas de humo zuztand.json" --reporters cli,html
+      - name: Copy Report to Reports Folder
+        if: always()
+        run: cp ./newman/newman-run-report-*.html ./reports/index.html || echo "Could not find newman report"
       - name: Debug - List Generated Files
         if: always()
-        run: find . -name "index.html" -o -name "*.html" | head -20 && ls -la reports/ 2>/dev/null || echo "reports folder not found"
+        run: ls -la reports/
       - name: Upload HTML Report
         if: always()
         uses: actions/upload-artifact@v4
