@@ -30,7 +30,7 @@ jobs:
         run: npm install -g newman
 
       - name: Levantar servidor
-        run: node src/App.tsx & sleep 10
+        run: node server/server.js & sleep 5
 
       - name: Ejecutar pruebas de humo
         run: newman run tests/pruebas_humo_marco.json
