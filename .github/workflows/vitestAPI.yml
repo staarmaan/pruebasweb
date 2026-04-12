@@ -18,8 +18,10 @@ jobs:
         run: node server/server.js &
       - name: Wait for Server to Start
         run: sleep 3
+      - name: Create Reports Directory
+        run: mkdir -p reports
       - name: Run Postman Collection Tests
-        run: newman run "Pruebas de humo zuztand.json" --reporters cli,html --reporter-html-outfile "reports/index.html"
+        run: newman run "Pruebas de humo zuztand.json" --reporters cli,html --reporter-html-outfile reports/index.html
       - name: Debug - List Generated Files
         if: always()
         run: find . -name "index.html" -o -name "*.html" | head -20 && ls -la reports/ 2>/dev/null || echo "reports folder not found"
@@ -28,4 +30,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: postman-report
-          path: reports/
+          path: reports/index.html
