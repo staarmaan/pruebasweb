@@ -5,19 +5,19 @@ import { v4 as uuidv4 } from 'uuid';
 const app = express();
 const PORT = 3000;
 
-// Middlewares
+//Middlewares.
 app.use(cors());
 app.use(express.json());
 
-// Base de datos en memoria
+//Bd en memoria.
 let pacientes = [];
 
-// GET - Listar todos los pacientes
+//GET para listar todos los pacientes.
 app.get('/api/pacientes', (req, res) => {
   res.json(pacientes);
 });
 
-// GET - Obtener un paciente por ID
+//GET para obtener un paciente por ID.
 app.get('/api/pacientes/:id', (req, res) => {
   const { id } = req.params;
   const paciente = pacientes.find(p => p.id === id);
@@ -29,7 +29,7 @@ app.get('/api/pacientes/:id', (req, res) => {
   res.json(paciente);
 });
 
-// POST - Crear un nuevo paciente
+//POST.
 app.post('/api/pacientes', (req, res) => {
   const { name, caretaker, email, date, symptoms } = req.body;
   
@@ -50,7 +50,7 @@ app.post('/api/pacientes', (req, res) => {
   res.status(201).json(nuevoPaciente);
 });
 
-// PUT - Actualizar un paciente
+//PUT.
 app.put('/api/pacientes/:id', (req, res) => {
   const { id } = req.params;
   const pacienteIndex = pacientes.findIndex(p => p.id === id);
@@ -62,14 +62,14 @@ app.put('/api/pacientes/:id', (req, res) => {
   const pacienteActualizado = {
     ...pacientes[pacienteIndex],
     ...req.body,
-    id // Asegura que el ID no cambie
+    id //Asegura que el ID no cambie
   };
   
   pacientes[pacienteIndex] = pacienteActualizado;
   res.json(pacienteActualizado);
 });
 
-// DELETE - Eliminar un paciente
+//DELETE.
 app.delete('/api/pacientes/:id', (req, res) => {
   const { id } = req.params;
   const pacienteIndex = pacientes.findIndex(p => p.id === id);
@@ -78,11 +78,11 @@ app.delete('/api/pacientes/:id', (req, res) => {
     return res.status(404).json({ error: 'Paciente no encontrado' });
   }
   
-  const pacienteEliminado = pacientes.splice(pacienteIndex, 1);
-  res.json(pacienteEliminado[0]);
+  pacientes.splice(pacienteIndex, 1);
+  res.status(204).send();
 });
 
-// Levanta el servidor
+//Levanta el servidor.
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en http://localhost:${PORT}`);
 });

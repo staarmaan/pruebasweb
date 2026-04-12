@@ -1,0 +1,307 @@
+{
+  "info": {
+    "_postman_id": "3b580a9f-c213-4b66-b83f-dc2095edafa4",
+    "name": "Pruebas API Pacientes",
+    "description": "Suite de pruebas para validar API de pacientes con validaciones de status code, schema JSON y performance",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "52885588",
+    "_collection_link": "https://go.postman.co/collection/52885588-3b580a9f-c213-4b66-b83f-dc2095edafa4?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Crear nuevo paciente valido",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Validacion de codigo 201', function () {",
+              "    pm.response.to.have.status(201);",
+              "});",
+              "",
+              "pm.test('Validar que tenga los 6 campos requeridos', function () {",
+              "    let jsonData = pm.response.json();",
+              "    pm.expect(jsonData).to.have.property('id');",
+              "    pm.expect(jsonData).to.have.property('name');",
+              "    pm.expect(jsonData).to.have.property('caretaker');",
+              "    pm.expect(jsonData).to.have.property('email');",
+              "    pm.expect(jsonData).to.have.property('date');",
+              "    pm.expect(jsonData).to.have.property('symptoms');",
+              "});",
+              "",
+              "pm.test('Validar ID no nulo', function () {",
+              "    let jsonData = pm.response.json();",
+              "    pm.expect(jsonData.id).to.not.be.null;",
+              "    pm.expect(jsonData.id).to.be.a('string');",
+              "    pm.expect(jsonData.id.length).to.be.greaterThan(0);",
+              "});",
+              "",
+              "pm.test('Tiempo de respuesta menor a 200ms', function () {",
+              "    pm.expect(pm.response.responseTime).to.be.below(200);",
+              "});",
+              "",
+              "//Guardar el ID para usar en otras pruebas.",
+              "let jsonData = pm.response.json();",
+              "pm.environment.set('paciente_id', jsonData.id);"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Filomena\",\n  \"caretaker\": \"Juan Orozco\",\n  \"email\": \"carlosjuan@gmail.com\",\n  \"date\": \"2025-03-10\",\n  \"symptoms\": \"Mucha comezon\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:3000/api/pacientes",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "api",
+            "pacientes"
+          ]
+        },
+        "description": "Crear un nuevo paciente con datos válidos"
+      },
+      "response": []
+    },
+    {
+      "name": "Validar datos incompletos",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Validar codigo 400, por datos incompletos', function () {",
+              "    pm.response.to.have.status(400);",
+              "});",
+              "",
+              "pm.test('Validar que la respuesta tenga mensaje de error', function () {",
+              "    let jsonData = pm.response.json();",
+              "    pm.expect(jsonData).to.have.property('error');",
+              "    pm.expect(jsonData.error).to.include('Faltan campos');",
+              "});",
+              "",
+              "pm.test('Tiempo de respuesta menor a 200ms', function () {",
+              "    pm.expect(pm.response.responseTime).to.be.below(200);",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Carlos\",\n  \"email\": \"damian@gmail.com\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:3000/api/pacientes",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "api",
+            "pacientes"
+          ]
+        },
+        "description": "Intentar crear paciente sin campos requeridos (caretaker, date, symptoms)"
+      },
+      "response": []
+    },
+    {
+      "name": "Validar arreglo de pacientes",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Validacion de codigo 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test('Validar que la rspuesta sea un arreglo de pacientes', function () {",
+              "    let jsonData = pm.response.json();",
+              "    pm.expect(jsonData).to.be.an('array');",
+              "});",
+              "",
+              "pm.test('Validar que todos los pacientes en el array tengan los 6 campos requeridos', function () {",
+              "    let jsonData = pm.response.json();",
+              "    if (jsonData.length > 0) {",
+              "        jsonData.forEach(function(paciente) {",
+              "            pm.expect(paciente).to.have.property('id');",
+              "            pm.expect(paciente).to.have.property('name');",
+              "            pm.expect(paciente).to.have.property('caretaker');",
+              "            pm.expect(paciente).to.have.property('email');",
+              "            pm.expect(paciente).to.have.property('date');",
+              "            pm.expect(paciente).to.have.property('symptoms');",
+              "            pm.expect(paciente.id).to.not.be.null;",
+              "        });",
+              "    }",
+              "});",
+              "",
+              "pm.test('Tiempo de respuesta menor a 200ms', function () {",
+              "    pm.expect(pm.response.responseTime).to.be.below(200);",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/api/pacientes",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "api",
+            "pacientes"
+          ]
+        },
+        "description": "Obtener la lista completa de pacientes para visualización en frontend"
+      },
+      "response": []
+    },
+    {
+      "name": "Obtener paciente por ID",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Validar codigo 200', function () {",
+              "    pm.response.to.have.status(200);",
+              "});",
+              "",
+              "pm.test('Validar que tenga los 6 campos requeridos', function () {",
+              "    let jsonData = pm.response.json();",
+              "    pm.expect(jsonData).to.have.property('id');",
+              "    pm.expect(jsonData).to.have.property('name');",
+              "    pm.expect(jsonData).to.have.property('caretaker');",
+              "    pm.expect(jsonData).to.have.property('email');",
+              "    pm.expect(jsonData).to.have.property('date');",
+              "    pm.expect(jsonData).to.have.property('symptoms');",
+              "});",
+              "",
+              "pm.test('Validar ID no nulo y existente', function () {",
+              "    let jsonData = pm.response.json();",
+              "    let idEsperado = pm.variables.get('paciente_id');",
+              "    pm.expect(jsonData.id).to.equal(idEsperado);",
+              "    pm.expect(jsonData.id).to.not.be.null;",
+              "});",
+              "",
+              "pm.test('Tiempo de respuesta menor a 200ms', function () {",
+              "    pm.expect(pm.response.responseTime).to.be.below(200);",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/api/pacientes/{{paciente_id}}",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "api",
+            "pacientes",
+            "{{paciente_id}}"
+          ]
+        },
+        "description": "Obtener un paciente específico por su ID"
+      },
+      "response": []
+    },
+    {
+      "name": "Borrar paciente",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test('Validar codigo en 204', function () {",
+              "    pm.response.to.have.status(204);",
+              "});",
+              "",
+              "pm.test('Validar reswpuesta vacia', function () {",
+              "    pm.expect(pm.response.text()).to.be.empty;",
+              "});",
+              "",
+              "pm.test('Tiempo de respuesta menor a 200ms', function () {",
+              "    pm.expect(pm.response.responseTime).to.be.below(200);",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:3000/api/pacientes/{{paciente_id}}",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "api",
+            "pacientes",
+            "{{paciente_id}}"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "paciente_id",
+      "value": ""
+    }
+  ]
+}
