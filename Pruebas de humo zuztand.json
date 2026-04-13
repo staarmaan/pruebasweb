@@ -37,7 +37,7 @@
               "});",
               "",
               "pm.test('Tiempo de respuesta menor a 200ms', function () {",
-              "    pm.expect(pm.response.responseTime).to.be.below(200);",
+              "    pm.expect(pm.response.responseTime).to.be.below(2);",
               "});",
               "",
               "//Guardar el ID para usar en otras pruebas.",
